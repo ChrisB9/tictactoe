@@ -20,7 +20,7 @@ tictactoe.constructor = (element) => {
 
 tictactoe.render = () => {
 	let flexString = "<div class='board'>"
-	for (let i = 0; i < 9; i++) {
+	for (let i = 0; i < tictactoe.size; i++) {
 		let winnerClass = ""
 		if (Array.isArray(tictactoe.state.winner) && tictactoe.state.winner.indexOf(i) > -1) {
 			winnerClass = "sq-won"
