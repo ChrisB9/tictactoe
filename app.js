@@ -18,6 +18,8 @@ tictactoe.constructor = (element) => {
 	tictactoe.render()
 }
 
+tictactoe.getSymbol = (index) => tictactoe.state.playerSymbols[tictactoe.state.board[index]]
+
 tictactoe.render = () => {
 	let flexString = "<div class='board'>"
 	for (let i = 0; i < tictactoe.size; i++) {
@@ -29,7 +31,7 @@ tictactoe.render = () => {
 			onclick: "tictactoe.clickHandler(this)"
 		}
 		flexString += "<div class='square "+winnerClass+"' id='cell-"+i+"' onclick='"+properties.onclick+"'>"
-		flexString += tictactoe.state.board[i]
+		flexString += tictactoe.getSymbol(i)
 		flexString += "</div>"
 	}
 	flexString += "</div><div class='message' id='winner'>"
@@ -45,7 +47,7 @@ tictactoe.clickHandler = (event) => {
 			tictactoe.state.boardMessage = "Player "+ nextTurn + "'s turn!"
 			if ((typeof(tictactoe.state.board.find((e) => {if (e === "") return true})) === "undefined"))
 				tictactoe.state.boardMessage = "There is no winner!"
-			tictactoe.state.board[event.id.split("-")[1]] = currentSymbol
+			tictactoe.state.board[event.id.split("-")[1]] = tictactoe.state.currentTurn
 			let wins = tictactoe.checkForWinner()
 			if (Array.isArray(wins)) {
 				tictactoe.state.boardMessage = "Player "+ currentSymbol+ " wins!"
