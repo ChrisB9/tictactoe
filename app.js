@@ -7,7 +7,7 @@ tictactoe.combinations = []
 tictactoe.state = {
 	playerSymbols: ["X", "O"],
 	currentTurn: 0,
-	board: Array(tictactoe.size).join(".").split("."),
+	board: Array(tictactoe.size),
 	winner: false,
 	boardMessage: "Enjoy Playing"
 }
@@ -18,7 +18,11 @@ tictactoe.constructor = (element) => {
 	tictactoe.render()
 }
 
-tictactoe.getSymbol = (index) => tictactoe.state.playerSymbols[tictactoe.state.board[index]]
+tictactoe.getSymbol = (index) => {
+	let symbol = tictactoe.state.board[index]
+	if (typeof(symbol) === "undefined") return ""
+	return tictactoe.state.playerSymbols[symbol]
+}
 
 tictactoe.render = () => {
 	let flexString = "<div class='board'>"
