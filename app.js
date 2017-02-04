@@ -7,7 +7,7 @@ tictactoe.combinations = []
 tictactoe.state = {
 	playerSymbols: ["X", "O"],
 	currentTurn: 0,
-	board: Array(tictactoe.size),
+	board: Array(tictactoe.size).fill(-1),
 	winner: false,
 	boardMessage: "Enjoy Playing"
 }
@@ -20,7 +20,7 @@ tictactoe.constructor = (element) => {
 
 tictactoe.getSymbol = (index) => {
 	let symbol = tictactoe.state.board[index]
-	if (typeof(symbol) === "undefined") return ""
+	if (symbol === -1) return ""
 	return tictactoe.state.playerSymbols[symbol]
 }
 
@@ -47,9 +47,9 @@ tictactoe.clickHandler = (event) => {
 	let currentSymbol = tictactoe.state.playerSymbols[tictactoe.state.currentTurn]
 	let nextTurn = tictactoe.state.playerSymbols[tictactoe.state.currentTurn === 0 ? 1 : 0]
 	if (!tictactoe.state.winner) {
-		if (tictactoe.state.board[event.id.split("-")[1]] === "") {
+		if (tictactoe.state.board[event.id.split("-")[1]] === -1) {
 			tictactoe.state.boardMessage = "Player "+ nextTurn + "'s turn!"
-			if ((typeof(tictactoe.state.board.find((e) => {if (e === "") return true})) === "undefined"))
+			if (tictactoe.state.board.some((e)=>e===-1))
 				tictactoe.state.boardMessage = "There is no winner!"
 			tictactoe.state.board[event.id.split("-")[1]] = tictactoe.state.currentTurn
 			let wins = tictactoe.checkForWinner()
@@ -104,9 +104,7 @@ tictactoe.getCombinations = () => {
 tictactoe.checkForWinner = () => {
 	var board = tictactoe.state.board
 	return tictactoe.combinations.find((combination) => {
-		if(board[combination[0]] !== "" &&
-			board[combination[1]] !== ""  &&
-			board[combination[2]] !== ""  &&
+		if(tictactoe.state.board.every((e)=>e!==-1) &&
 			board[combination[0]] === board[combination[1]] &&
 			board[combination[1]] === board[combination[2]]) {
         	return combination
@@ -114,5 +112,20 @@ tictactoe.checkForWinner = () => {
 		return false
 	})
 }
+
+tictactoe.ai = {}
+
+tictactoe.ai.state = {
+
+}
+
+tictactoe.ai.score = {
+
+}
+
+tictactoe.ai.getScore = () => {
+
+}
+
 
 (() => tictactoe.constructor("root"))("init")
