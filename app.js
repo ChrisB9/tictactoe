@@ -119,9 +119,9 @@ tictactoe.ai.currentTurn = 0
 tictactoe.ai.choice = []
 
 tictactoe.ai.minimax = (board) => {
-	if (!tictactoe.state.winner) return tictactoe.ai.getScore(board, tictactoe.ai.currentTurn)
-	let scores = []
-	let moves = []
+	if (tictactoe.state.winner) return tictactoe.ai.getScore(board, tictactoe.ai.currentTurn)
+	var scores = []
+	var moves = []
 	board.filter((e, index, array) => {
 		if (e === -1) {
 			let tmpBoard = board
