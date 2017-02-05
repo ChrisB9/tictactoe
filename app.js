@@ -104,10 +104,10 @@ tictactoe.getCombinations = () => {
 tictactoe.checkForWinner = (board) => {
 	return tictactoe.combinations.find((combination) => {
 		if(board[combination[0]] !== -1 &&
- +			board[combination[1]] !== -1  &&
- +			board[combination[2]] !== -1  &&
- +			board[combination[0]] === board[combination[1]] &&
- +			board[combination[1]] === board[combination[2]]) {
+ 			board[combination[1]] !== -1  &&
+ 			board[combination[2]] !== -1  &&
+ 			board[combination[0]] === board[combination[1]] &&
+ 			board[combination[1]] === board[combination[2]]) {
         	return combination
 		}
 		return false
