@@ -49,16 +49,16 @@ tictactoe.clickHandler = (event) => {
 	if (!tictactoe.state.winner) {
 		if (tictactoe.state.board[event.id.split("-")[1]] === -1) {
 			tictactoe.state.boardMessage = "Player "+ nextTurn + "'s turn!"
-			if (tictactoe.state.board.some((e)=>e===-1))
-				tictactoe.state.boardMessage = "There is no winner!"
 			tictactoe.state.board[event.id.split("-")[1]] = tictactoe.state.currentTurn
-			let wins = tictactoe.checkForWinner()
+			let wins = tictactoe.checkForWinner(tictactoe.state.board)
 			if (Array.isArray(wins)) {
 				tictactoe.state.boardMessage = "Player "+ currentSymbol+ " wins!"
 				tictactoe.state.winner = wins
 			}
 			tictactoe.state.currentTurn = tictactoe.state.currentTurn === 0 ? 1 : 0
 		}
+		if (!tictactoe.state.board.some((e)=>e===-1))
+			tictactoe.state.boardMessage = "There is no winner!"
 	}
 	tictactoe.render()
 }
@@ -101,8 +101,7 @@ tictactoe.getCombinations = () => {
 	return combos
 }
 
-tictactoe.checkForWinner = () => {
-	var board = tictactoe.state.board
+tictactoe.checkForWinner = (board) => {
 	return tictactoe.combinations.find((combination) => {
 		if(tictactoe.state.board.every((e)=>e!==-1) &&
 			board[combination[0]] === board[combination[1]] &&
@@ -115,16 +114,37 @@ tictactoe.checkForWinner = () => {
 
 tictactoe.ai = {}
 
-tictactoe.ai.state = {
+tictactoe.ai.player = 0
+tictactoe.ai.currentTurn = 0
+tictactoe.ai.choice = []
 
+tictactoe.ai.minimax = (board) => {
+	if (!tictactoe.state.winner) return tictactoe.ai.getScore(board, tictactoe.ai.currentTurn)
+	let scores = []
+	let moves = []
+	board.filter((e, index, array) => {
+		if (e === -1) {
+			let tmpBoard = board
+			tmpBoard[index] = tictactoe.ai.currentTurn
+			scores.push(tictactoe.ai.minimax(tmpBoard))
+			moves.push(index)
+		}
+	})
+	if (tictactoe.state.currentTurn === tictactoe.ai.player) {
+		let bestIndex = scores.reduce((best, e, index, arr) => e > arr[best] ? index : best, 0)
+		tictactoe.ai.choice = moves[bestIndex]
+		return scores[bestIndex]
+	}
+	let worstIndex = scores.reduce((worst, e, index, arr) => e < arr[worst] ? index : worst, 0)
+	tictactoe.ai.choice = moves[worstIndex]
+	return scores[worstIndex]
 }
 
-tictactoe.ai.score = {
-
-}
-
-tictactoe.ai.getScore = () => {
-
+tictactoe.ai.getScore = (board, player) => {
+	if (Array.isArray(tictactoe.checkForWinner(board))){
+		return player === tictactoe.ai.player ? 10:-10;
+	}
+	return 0
 }
 
 
