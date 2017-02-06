@@ -121,8 +121,6 @@ tictactoe.ai.currentTurn = 0
 tictactoe.ai.choice = []
 
 tictactoe.ai.minimax = (board, depth, player) => {
-	tictactoe.state.board = board
-	tictactoe.render()
 	let wins = tictactoe.checkForWinner(board)
 	if (Array.isArray(wins)) {
 		return tictactoe.ai.getScore(board, player)-depth
@@ -137,7 +135,7 @@ tictactoe.ai.minimax = (board, depth, player) => {
 	moves.forEach((e) => {
 		let tmpBoard = board
 		tmpBoard[e] = +player
-		setTimeout(()=>{score.push(tictactoe.ai.minimax(tmpBoard, depth+1, !player))},10)
+		score.push(tictactoe.ai.minimax(tmpBoard, depth+1, !player))
 	})
 	console.log("mv", moves, score)
 	if (player === tictactoe.ai.player) {
