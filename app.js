@@ -117,12 +117,11 @@ tictactoe.checkForWinner = (board) => {
 tictactoe.ai = {}
 
 tictactoe.ai.player = true
-tictactoe.ai.currentTurn = 0
 tictactoe.ai.choice = []
 
 tictactoe.ai.minimax = (board, depth, player) => {
 	let wins = tictactoe.checkForWinner(board)
-	if (Array.isArray(wins)) {
+	if (Array.isArray(wins) || !board.includes(-1)) {
 		return tictactoe.ai.getScore(board, player)-depth
 	}
 	var score = []
