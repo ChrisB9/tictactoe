@@ -116,35 +116,44 @@ tictactoe.checkForWinner = (board) => {
 
 tictactoe.ai = {}
 
-tictactoe.ai.player = 0
+tictactoe.ai.player = true
 tictactoe.ai.currentTurn = 0
 tictactoe.ai.choice = []
 
-tictactoe.ai.minimax = (board) => {
-	if (tictactoe.state.winner) return tictactoe.ai.getScore(board, tictactoe.ai.currentTurn)
-	var scores = []
+tictactoe.ai.minimax = (board, depth, player) => {
+	tictactoe.state.board = board
+	tictactoe.render()
+	let wins = tictactoe.checkForWinner(board)
+	if (Array.isArray(wins)) {
+		return tictactoe.ai.getScore(board, player)-depth
+	}
+	var score = []
 	var moves = []
 	board.filter((e, index, array) => {
 		if (e === -1) {
-			let tmpBoard = board
-			tmpBoard[index] = tictactoe.ai.currentTurn
-			scores.push(tictactoe.ai.minimax(tmpBoard))
 			moves.push(index)
 		}
 	})
-	if (tictactoe.state.currentTurn === tictactoe.ai.player) {
-		let bestIndex = scores.reduce((best, e, index, arr) => e > arr[best] ? index : best, 0)
+	moves.forEach((e) => {
+		let tmpBoard = board
+		tmpBoard[e] = +player
+		setTimeout(()=>{score.push(tictactoe.ai.minimax(tmpBoard, depth+1, !player))},10)
+	})
+	console.log("mv", moves, score)
+	if (player === tictactoe.ai.player) {
+		let bestIndex = score.reduce((best, e, index, arr) => e > arr[best] ? index : best, 0)
 		tictactoe.ai.choice = moves[bestIndex]
-		return scores[bestIndex]
+		return score[bestIndex]-depth
 	}
-	let worstIndex = scores.reduce((worst, e, index, arr) => e < arr[worst] ? index : worst, 0)
+	let worstIndex = score.reduce((worst, e, index, arr) => e < arr[worst] ? index : worst, 0)
 	tictactoe.ai.choice = moves[worstIndex]
-	return scores[worstIndex]
+	return score[worstIndex]-depth
 }
 
 tictactoe.ai.getScore = (board, player) => {
 	if (Array.isArray(tictactoe.checkForWinner(board))){
-		return player === tictactoe.ai.player ? 10:-10;
+		let sc = player === tictactoe.ai.player ? 10:-10;
+		console.log("gs", sc, board, player)
 	}
 	return 0
 }
